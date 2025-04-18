@@ -1,0 +1,1 @@
+java -jar RTSyncSimpleServer-jar-with-dependencies.jar %*

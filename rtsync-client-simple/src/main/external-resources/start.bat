@@ -1,0 +1,1 @@
+java -jar RTSyncSimpleClient-jar-with-dependencies.jar %*

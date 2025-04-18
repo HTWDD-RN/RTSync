@@ -1,0 +1,1 @@
+java -Dnetbeans.logger.console=true -Xdebug -Xnoagent -Xrunjdwp:transport=dt_socket,suspend=n,server=y,address=8888 -jar RTSyncSimpleServer-jar-with-dependencies.jar %*

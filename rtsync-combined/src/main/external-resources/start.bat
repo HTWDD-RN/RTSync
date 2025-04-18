@@ -1,0 +1,1 @@
+java -jar RTSync-jar-with-dependencies.jar %*
