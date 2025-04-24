@@ -7,22 +7,22 @@ A library to facilitate Real-Time Collaborative Editing (RTCE). The intended use
 RTSync consists of ten subprojects which serve the purpose to provide executable projects with the required classes while avoiding the inclusion of unnecessary classes.
 The executable subprojects are separated by network node type (server or client) and Real-Time model grouping (simple or project). The combination of both can be thought of as a 2x2 matrix.
 
-					Simple			Project				
+			       Simple       	       Project				
 	Server	rtsync-simple-server	rtsync-project-server
 	Client	rtsync-simple-client	rtsync-project-client
 
 List of Subprojects:
 
-	rtsync-core	 			Includes types for all other subprojects as well es otter-java.
-	rtsync-node-simple		Required for simple model grouping.
-	rtsync-node-project		Required for project model grouping.
-	rtsync-client-core		Required by clients.
-	rtsync-server-core		Required by servers.
-	rtsync-client-simple	Executable - Runs a client with simple model grouping
+	rtsync-core          	Includes types for all other subprojects as well es otter-java.
+	rtsync-node-simple   	Required for simple model grouping.
+	rtsync-node-project  	Required for project model grouping.
+	rtsync-client-core   	Required by clients.
+	rtsync-server-core   	Required by servers.
+	rtsync-client-simple 	Executable - Runs a client with simple model grouping
 	rtsync-client-project	Executable - Runs a client with project model grouping
-	rtsync-server-simple	Executable - Runs a server with simple model grouping
+	rtsync-server-simple 	Executable - Runs a server with simple model grouping
 	rtsync-server-project	Executable - Runs a server with project model grouping
-	rtsync-combined			Includes all other subprojects. Executable - Runs Any of the other executable subprojects. Contains integration tests.
+	rtsync-combined      	Includes all other subprojects. Executable - Runs Any of the other executable subprojects. Contains integration tests.
 	
 ## Model Grouping
 
@@ -34,13 +34,25 @@ The model grouping determines the relation of network nodes to their real-time m
 
 # Build RTSync
 
-## 1. Get the files
-Either Check out this project using git: `git clone https://github.com/HTWDD-RN/RTSync.git` or [download it as an archive](https://github.com/HTWDD-RN/RTSync/archive/refs/heads/main.zip) and unpack it.
+## Prerequisite
+**Maven:** You need maven for the steps 1 and 3. Ask your IT department for it or see https://maven.apache.org/install.html.
 
-## 2. Build the maven project
-You need maven to build this project. Ask your IT department for it or see https://maven.apache.org/install.html.
+## 1. Build the otter-java maven project
+### Get the files for otter-java
+Either Check out otter-java from the HTWD repository using git: `git clone https://github.com/HTWDD-RN/otter-java.git` or [download otter-java as an archive](https://github.com/HTWDD-RN/otter-java/archive/refs/heads/main.zip) and unpack it.
+### Install otter-java
+Open a console. Change into the otter-java project folder from the previous step which we assume to be called otter-java. Then have maven install it. The tests can be skipped in order to save time by using the parameter -DskipTests.
 
-Open a console. Change into the project folder from step 1 which we assume to be called RTSync. Then have maven install it. The tests can be skipped in order to save time by using the parameter -DskipTests.
+`cd otter-java`
+
+`mvn install -DskipTests`
+
+## 2. Build the RTSync maven project
+### Get the files for RTSync
+Either Check out RTSync from the HTWD repository using git: `git clone https://github.com/HTWDD-RN/RTSync.git` or [download RTSync as an archive](https://github.com/HTWDD-RN/RTSync/archive/refs/heads/main.zip) and unpack it.
+### Install RTSync
+
+Open a console. Change into the RTSync project folder from the previous step which we assume to be called RTSync. Then have maven install it. The tests can be skipped in order to save time by using the parameter -DskipTests.
 
 `cd RTSync`
 
@@ -56,8 +68,6 @@ There are two start files in each of those target directories. One is simply cal
 The console is assumed to be opened in the directory RTSync at the beginning of the steps in 3. as well as at the beginning of the steps in 4.
 
 ## 3. Run a server
-
-The console is assumed to be opened in the directory RTSync.
 
 ### Server with Simple Model Grouping: 
 
