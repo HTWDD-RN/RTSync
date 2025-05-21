@@ -7,15 +7,9 @@ A library to facilitate Real-Time Collaborative Editing (RTCE). The intended use
 RTSync consists of ten subprojects which serve the purpose to provide executable projects with the required classes while avoiding the inclusion of unnecessary classes.
 The executable subprojects are separated by network node type (server or client) and Real-Time model grouping (simple or project). The combination of both can be thought of as a 2x2 matrix.
 
-<<<<<<< HEAD
 					Simple			Project				
 	Server	rtsync-server-simple	rtsync-server-project
 	Client	rtsync-client-simple	rtsync-client-project
-=======
-			       Simple       	       Project				
-	Server	rtsync-simple-server	rtsync-project-server
-	Client	rtsync-simple-client	rtsync-project-client
->>>>>>> 9725671cb8227681bb9b8002ddbe4318e8805cf5
 
 List of Subprojects:
 
