@@ -8,8 +8,8 @@ RTSync consists of ten subprojects which serve the purpose to provide executable
 The executable subprojects are separated by network node type (server or client) and Real-Time model grouping (simple or project). The combination of both can be thought of as a 2x2 matrix.
 
 					Simple			Project				
-	Server	rtsync-simple-server	rtsync-project-server
-	Client	rtsync-simple-client	rtsync-project-client
+	Server	rtsync-server-simple	rtsync-server-project
+	Client	rtsync-client-simple	rtsync-client-project
 
 List of Subprojects:
 

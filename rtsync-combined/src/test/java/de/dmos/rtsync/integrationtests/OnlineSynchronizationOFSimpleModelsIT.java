@@ -103,13 +103,14 @@ class OnlineSynchronizationOFSimpleModelsIT extends AbstractSynchronizationOFSim
 
 	// SharedObject data of client 1.
 	String listId = "list1";
+	boolean boo = true;
 	byte b = 50;
 	short s = 2500;
 	int i = 100;
 	long l = 66600000022l;
 	float f = -21.1f;
 	double d = 5236346226.12314543643;
-	List<Object> numbers = List.of(b, s, i, l, f, d);
+	List<Object> numbers = List.of(b, s, i, l, f, d, boo);
 	List<String> subListStrings = List.of("sl1s1", "sl1s2");
 
 	// SharedObject data of client 2.

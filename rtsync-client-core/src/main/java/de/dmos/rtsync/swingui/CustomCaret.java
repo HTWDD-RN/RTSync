@@ -98,7 +98,7 @@ class CustomCaret
   }
 
   /**
-   * Paints this caret as a simple rectangle with the with given by {@link #setWidth(int)} at the coordinates of the dot
+   * Paints this caret as a simple rectangle with the width given by {@link #setWidth(int)} at the coordinates of the dot in
    * in the text component.
    *
    * @see DefaultCaret#paint(Graphics)
