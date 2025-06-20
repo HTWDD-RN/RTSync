@@ -44,7 +44,7 @@ public class RTSyncProjectClient
 	return _sync;
   }
 
-  public ClientConnectionHandler getConnection()
+  public ClientConnectionHandler getConnectionHandler()
   {
 	return _sync.getConnectionHandler();
   }

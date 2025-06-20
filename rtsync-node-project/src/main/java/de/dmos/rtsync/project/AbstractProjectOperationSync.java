@@ -105,7 +105,10 @@ public abstract class AbstractProjectOperationSync<T extends RTProjectData> impl
   public T closeProject(String project)
   {
 	T closed = _projectData.remove(project);
-	_localProjectListeners.toStrongStream().forEach(l -> l.localProjectClosed(closed));
+	if ( closed != null )
+	{
+	  _localProjectListeners.toStrongStream().forEach(l -> l.localProjectClosed(closed));
+	}
 	return closed;
   }
 

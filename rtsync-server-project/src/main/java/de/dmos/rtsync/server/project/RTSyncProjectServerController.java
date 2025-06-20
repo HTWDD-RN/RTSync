@@ -1,9 +1,8 @@
 package de.dmos.rtsync.server.project;
 
 import java.security.Principal;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import javax.swing.SwingUtilities;
@@ -22,6 +21,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.messaging.simp.user.SimpUserRegistry;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 import org.springframework.web.socket.messaging.SessionUnsubscribeEvent;
 
 import de.dmos.rtsync.listeners.LocalProjectListener;
@@ -59,12 +59,8 @@ LocalProjectListener<RTProjectData>
 	  EndpointPaths.QUEUE + EndpointPaths.DELIMITER + "%s" + EndpointPaths.PATH_EXCEPTION;
 
   private final RTProjectServerOperationSync _serverSync;
-  /**
-   * Keeps track of subscribed destinations. Idea found on
-   * https://stackoverflow.com/questions/65386649/how-can-i-get-subscribe-destination-from-unsubscribe-frame-in-spring-websocket-s
-   */
-  private final Map<String, String>			 _subscriptionIdProjects		 = new HashMap<>();
 
+  private boolean							 _autoCloseProjects				 = true;
 
   @Autowired
   public RTSyncProjectServerController(
@@ -88,10 +84,21 @@ LocalProjectListener<RTProjectData>
 		.filter(s -> s.getDestination().endsWith(EndpointPaths.PATH_ALL_TOPICS))
 		.map(s -> ProjectPathUtil.getProjectFromDestination(s.getDestination()))
 		.toList();
-	List<String> removedProjectSubscriptions =
-		unsubscriber.getProjects().stream().filter(p -> !usersRemainingProjectSubsciptions.contains(p)).toList();
+	Set<String> removedProjectSubscriptions = new HashSet<>(
+		unsubscriber.getProjects().stream().filter(p -> !usersRemainingProjectSubsciptions.contains(p)).toList());
 	removedProjectSubscriptions.forEach(unsubscriber::removeProject);
-	SwingUtilities.invokeLater(() -> removedProjectSubscriptions.forEach(this::broadCastProjectSubscribers));
+	SwingUtilities.invokeLater(() -> {
+	  removedProjectSubscriptions.forEach(this::broadCastProjectSubscribers);
+	  autoCloseProjectsIfSuitable(removedProjectSubscriptions);
+	});
+  }
+
+  @Override
+  public void onDisconnectEvent(SessionDisconnectEvent event)
+  {
+	super.onDisconnectEvent(event);
+	Subscriber subscriber = getSubscriber(event.getUser());
+	SwingUtilities.invokeLater(() -> autoCloseProjectsIfSuitable(subscriber.getProjects()));
   }
 
   @Override
@@ -251,7 +258,45 @@ LocalProjectListener<RTProjectData>
   @Override
   public void localProjectClosed(RTProjectData project)
   {
-	// This is currently not used, because projects are kept open all the time.
 	broadCastProjectList();
+  }
+
+  public void setAutoCloseProjects(boolean autoCloseProjects)
+  {
+	_autoCloseProjects = autoCloseProjects;
+	autoCloseProjectsIfSuitable(null);
+  }
+
+  public boolean isAutoCloseProjects()
+  {
+	return _autoCloseProjects;
+  }
+
+  /**
+   * Closes projects which no client has subscribed to if _autoCloseProjects is set.
+   *
+   * @param projectsToCheck An optional set of projects to potentially close. If null, then all opened projects are
+   *          checked.
+   */
+  private void autoCloseProjectsIfSuitable(Set<String> projectsToCheck)
+  {
+	if ( !_autoCloseProjects )
+	{
+	  return;
+	}
+	Set<String> neededProjects = new HashSet<>(
+		_simpUserRegistry
+		.getUsers()
+		.parallelStream()
+		.map(u -> getSubscriber(u.getPrincipal()))
+		.flatMap(s -> s.getProjects().stream())
+		.distinct()
+		.toList());
+	if ( projectsToCheck == null )
+	{
+	  projectsToCheck = _serverSync.getLocalProjectNames();
+	}
+	LOG.trace("projects to check: {}\nneeded projects: {}", projectsToCheck, neededProjects);
+	projectsToCheck.stream().filter(p -> !neededProjects.contains(p)).forEach(_serverSync::closeProject);
   }
 }

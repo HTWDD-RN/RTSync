@@ -3,6 +3,9 @@ package de.dmos.rtsync.server.project;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import de.dmos.rtsync.message.TaggedUserOperation;
 import de.dmos.rtsync.project.AbstractProjectOperationSync;
 import de.dmos.rtsync.project.RTProjectData;
@@ -13,6 +16,9 @@ import se.l4.otter.operations.combined.CombinedHandler;
 
 public class RTProjectServerOperationSync extends AbstractProjectOperationSync<RTProjectData>
 {
+  private static final Logger						LOG	=
+	  LoggerFactory.getLogger(RTProjectServerOperationSync.class);
+
   private final Thread							   _triggerThread;
   private final BlockingQueue<ProjectUserOperation>	_messageQueue;
   private final ProjectServerNetworkHandler			_serverNetworkHandler;
@@ -91,6 +97,14 @@ public class RTProjectServerOperationSync extends AbstractProjectOperationSync<R
   @Override
   protected RTProjectData createRTProjectData(String project)
   {
+	LOG.info("Opening project {}", project);
 	return new RTProjectData(project, this);
+  }
+
+  @Override
+  public RTProjectData closeProject(String project)
+  {
+	LOG.info("Closing project {}", project);
+	return super.closeProject(project);
   }
 }

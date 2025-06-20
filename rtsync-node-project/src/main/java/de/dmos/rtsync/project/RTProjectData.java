@@ -22,6 +22,7 @@ import se.l4.otter.operations.internal.combined.DefaultCombinedDelta;
 public class RTProjectData extends AbstractOperationSync
 {
   private final CustomModel									  _model;
+  private final CustomEditor<Operation<CombinedHandler>> _editor;
   private final String						   _project;
   protected final AbstractProjectOperationSync<?> _projectSync;
 
@@ -30,8 +31,8 @@ public class RTProjectData extends AbstractOperationSync
 	super(createEditorControl(projectSync.isServer()));
 	_project = project;
 	_projectSync = projectSync;
-	CustomEditor<Operation<CombinedHandler>> editor = new CustomEditor<>(this);
-	_model = new CustomModelBuilder(editor).setResetOnOperationException(!projectSync.isServer()).build();
+	_editor = new CustomEditor<>(this);
+	_model = new CustomModelBuilder(_editor).setResetOnOperationException(!projectSync.isServer()).build();
   }
 
   private static CustomEditorControl<Operation<CombinedHandler>> createEditorControl(boolean isServer)
@@ -51,6 +52,11 @@ public class RTProjectData extends AbstractOperationSync
   public String getProject()
   {
 	return _project;
+  }
+
+  public CustomEditor<Operation<CombinedHandler>> getEditor()
+  {
+	return _editor;
   }
 
   @Override

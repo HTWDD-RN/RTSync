@@ -158,7 +158,11 @@ public class SharedObjectHelper
   @SuppressWarnings("all")
   public static Map<String, Object> toMap(Object obj)
   {
-	if ( obj instanceof Map map )
+	if ( obj instanceof CustomModel model )
+	{
+	  return model.getRoot().toMap();
+	}
+	else if ( obj instanceof Map map )
 	{
 	  return map;
 	}
@@ -166,6 +170,7 @@ public class SharedObjectHelper
 	{
 	  return customSharedMap.toMap();
 	}
+
 	return null;
   }
 
